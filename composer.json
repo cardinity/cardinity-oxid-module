@@ -1,0 +1,7 @@
+{
+    "name": "cardinity/oxid-client",
+    "type": "oxid-plugin",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
