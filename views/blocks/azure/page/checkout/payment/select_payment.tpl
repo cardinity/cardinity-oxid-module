@@ -18,22 +18,15 @@
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">
         <ul class="form">
             <li>
-                <label>Credit card:</label>
-                <select name="dynvalue[kktype]">
-                    <option value="mcd" selected="">Mastercard</option>
-                    <option value="vis">Visa</option>
-                </select>
-            </li>
-            <li>
                 <label>Number:</label>
-                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kknumber]" autocomplete="off" value="4111111111111111">
+                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccnumber]" autocomplete="off" value="4111111111111111">
                 <p class="oxValidateError">
                     <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
                 </p>
             </li>
             <li>
                 <label>Account holder:</label>
-                <input type="text" size="20" class="js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[kkname]" value="Mike Dough">
+                <input type="text" size="20" class="js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[ccname]" value="Mike Dough">
                 <p class="oxValidateError">
                     <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
                 </p>
@@ -42,7 +35,7 @@
             </li>
             <li>
                 <label>Valid until:</label>
-                <select name="dynvalue[kkmonth]">
+                <select name="dynvalue[ccmonth]">
                   <option>01</option>
                   <option>02</option>
                   <option>03</option>
@@ -59,7 +52,7 @@
 
                 &nbsp;/&nbsp;
 
-                <select name="dynvalue[kkyear]">
+                <select name="dynvalue[ccyear]">
                     <option>2015</option>
                     <option selected="selected">2016</option>
                     <option>2017</option>
@@ -75,7 +68,7 @@
             </li>
             <li>
                 <label>CVV2 or CVC2 security code:</label>
-                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kkpruef]" autocomplete="off" value="456">
+                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccpruef]" autocomplete="off" value="456">
                 <p class="oxValidateError">
                     <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
                 </p>

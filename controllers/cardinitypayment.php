@@ -3,17 +3,6 @@
 class cardinityPayment extends cardinityPayment_parent {
 
     public function render() {
-        $oUser = $this->getUser();
-//        if ($oUser) {
-//            if (!oxSession::hasVar('nngust'))
-//                oxSession::setVar('nngust', $oUser->oxuser__oxid->value);
-//
-//            if (oxSession::getVar('nngust') != $oUser->oxuser__oxid->value) {
-//                /* Register guest unset */
-//                oxSession::deleteVar('nngust');
-//                oxSession::deleteVar("dynvalue");
-//            }
-//        }
 
         return parent::render();
     }
@@ -21,7 +10,7 @@ class cardinityPayment extends cardinityPayment_parent {
     /**
      * Assign to get dynvalues
      *
-     * Assign Novalnet Payment types to get dynamic values like userdata etc from views.
+     * Assign Cardinity Payment type to get dynamic values like userdata etc from views.
      *
      * @extend Dynvalues
      * @param
@@ -30,7 +19,7 @@ class cardinityPayment extends cardinityPayment_parent {
     public function getDynValue() {
         parent::getDynValue();
         $aPaymentList = parent::getPaymentList();
-	$result = isset($aPaymentList['novalnetsepa']) ? $this->_assignDebitNoteParams():'';
+	$result = isset($aPaymentList['cardinity']) ? $this->_assignParams():'';
         
         return $this->_aDynValue;
     }
@@ -38,19 +27,19 @@ class cardinityPayment extends cardinityPayment_parent {
     /**
      * Assign params
      *
-     * Assign Novalnet Payment types params in instance.
+     * Assign Cardinity Payment type params in instance.
      *
      * @extend Dynvalues
      * @param None
      *
      */
-    protected function _assignDebitNoteParams() {
+    protected function _assignParams() {
         parent::_assignDebitNoteParams();
         $oUserPayment = oxNew('oxuserpayment');
 
-        if ($oUserPayment->getPaymentByPaymentType($this->getUser(), 'novalnetsepa')) {
-            $aAddPaymentData = oxUtils::getInstance()->assignValuesFromText($oUserPayment->oxuserpayments__oxvalue->value);
-
+        if ($oUserPayment->getPaymentByPaymentType($this->getUser(), 'cardinity')) {
+            $oxUtils = new oxUtils();
+            $aAddPaymentData = $oxUtils->assignValuesFromText($oUserPayment->oxuserpayments__oxvalue->value);
             //check values is already set
             $this->_checkPaymentData($aAddPaymentData);
         }

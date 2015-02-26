@@ -23,7 +23,7 @@ class cardinityPaymentGateway extends cardinityPaymentGateway_parent {
       
       // get payment information
       // convert payment information into array for easier access
-      $aPaymentInfoArr = array();    
+      $aPaymentInfoArr = array();  
       foreach ($this->_oPaymentInfo->_aDynValues as $obj) {
         $key = $obj->name;
         $value = $obj->value;
@@ -35,35 +35,60 @@ class cardinityPaymentGateway extends cardinityPaymentGateway_parent {
       $oUser = &oxNew("oxuser", "core");
       $oUser->Load($sUserID);  
 
-      $cardinity = \Cardinity\Client::create(array(
-          'consumerKey' => $this->consumerKey,
-          'consumerSecret' => $this->consumerSecret,
-      ));
+      $viewConfig = oxRegistry::getConfig()->getTopActiveView()->getViewConfig();
 
+      $cardinity = \Cardinity\Client::create(array(
+          'consumerKey' => $viewConfig->getCardinityConfigParam('consumerKey'),
+          'consumerSecret' => $viewConfig->getCardinityConfigParam('consumerSecret'),
+      ));
       $payment = new \Cardinity\Payment\Create(array(
-            'amount' => $dAmount,
+            'amount' => CardinityUtils::formatAmount($dAmount),
             'currency' => 'EUR',
-            'settle' => false,
+            'settle' => true,
             'description' => $this->getConfig()->getActiveShop()->oxshops__oxname->value,
-            'order_id' => $oOrder->oxorder__oxorderdate->value,
+            'order_id' => $this->_getOrderId($oOrder),
             'country' => 'LT',
             'payment_method' => \Cardinity\Payment\Create::CARD,
             'payment_instrument' => [
-                'pan' => $aPaymentInfoArr['kknumber'],
-                'exp_year' => $aPaymentInfoArr['kkyear'],
-                'exp_month' => $aPaymentInfoArr['kkmonth'],
-                'cvc' => $aPaymentInfoArr['kkpruef'],
-                'holder' => $aPaymentInfoArr['kkname']
+                'pan' => $aPaymentInfoArr['ccnumber'],
+                'exp_year' => $aPaymentInfoArr['ccyear'],
+                'exp_month' => $aPaymentInfoArr['ccmonth'],
+                'cvc' => $aPaymentInfoArr['ccpruef'],
+                'holder' => $aPaymentInfoArr['ccname']
             ],
       ));
       
       $this->responseData = $cardinity->get($payment);
-      var_dump($this->responseData);die;
+      
+      $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_OK);
+      
+      return true;
+      
+    } catch (\Cardinity\Exception\RequestFailed $e) {
+        
+      $this->_updateOrderTransaction($oOrder, $e->getResponseData(), CardinityUtils::STATUS_FAILED);
+      return true;
       
     } catch (Exception $e) {
+        
       $this->_sLastError = $e->getMessage();
       return false;
+      
     }    
+  }
+  
+  private function _getOrderId($oOrder)
+  {
+      return date('YmdHis', strtotime($oOrder->oxorder__oxorderdate->value));
+  }
+  
+  private function _updateOrderTransaction(&$oOrder, $response, $status)
+  {
+        $oOrder->oxorder__cardinity_status = new oxField($status);
+        $oOrder->oxorder__cardinity_payment_type = new oxField($response['type']);
+        $oOrder->oxorder__cardinity_id = new oxField($response['id']);
+        $oOrder->oxorder__cardinity_response = new oxField(json_encode($response));
+        $oOrder->save(); 
   }
   
 }
