@@ -34,11 +34,11 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 
             $payment = new \Cardinity\Payment\Create([
                 'amount' => CardinityUtils::formatAmount($dAmount),
-                'currency' => 'EUR',
+                'currency' => $oOrder->oxorder__oxcurrency->value,
                 'settle' => true,
                 'description' => $this->getConfig()->getActiveShop()->oxshops__oxname->value,
                 'order_id' => $this->_getOrderId($oOrder),
-                'country' => 'LT',
+                'country' => $this->getCountryCode($oOrder),
                 'payment_method' => \Cardinity\Payment\Create::CARD,
                 'payment_instrument' => [
                     'pan' => $aPaymentInfoArr['ccnumber'],
@@ -56,17 +56,27 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
             return true;
         } catch (\Cardinity\Exception\RequestFailed $e) {
 
+            if(isset($e->getResponseData()['error'])){
+                $this->_sLastError = $e->getResponseData()['error'];
+            }
             $this->_updateOrderTransaction($oOrder, $e->getResponseData(), CardinityUtils::STATUS_FAILED);
 
-            return true;
+            return false;
         } catch (Exception $e) {
-
-            $this->_sLastError = $e->getMessage();
 
             return false;
         }
     }
 
+    private function getCountryCode($oOrder)
+    {
+        $countryId = $oOrder->oxorder__oxbillcountryid->value;
+        $oCountry = &oxNew("oxcountry", "core");
+        $oCountry->Load($countryId); 
+        
+        return $oCountry->oxcountry__oxisoalpha2->value;
+    }
+    
     /**
      * Get credit card information
      * 
@@ -118,7 +128,9 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
         $oOrder->oxorder__cardinity_payment_type = new oxField($response['type']);
         $oOrder->oxorder__cardinity_id = new oxField($response['id']);
         $oOrder->oxorder__cardinity_response = new oxField(json_encode($response));
-        $oOrder->oxorder__oxpaid = new oxField(date('Y-m-d H:i:s'));
+        if($status == CardinityUtils::STATUS_OK){
+            $oOrder->oxorder__oxpaid = new oxField(date('Y-m-d H:i:s'));
+        }
         $oOrder->save();
     }
 

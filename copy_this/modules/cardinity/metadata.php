@@ -28,6 +28,9 @@ $aModule = [
         ['template'    => 'page/checkout/payment.tpl',
               'block'       => 'select_payment',
               'file'        => '/views/blocks/azure/page/checkout/payment/SelectPayment.tpl'],
+        ['template'    => 'page/checkout/payment.tpl',
+              'block'       => 'checkout_payment_errors',
+              'file'        => '/views/blocks/azure/page/checkout/payment/CheckoutPaymentError.tpl'],
     ],
     'templates'     => [
         'CardinityConfig.tpl'  => 'cardinity/views/admin/tpl/CardinityConfig.tpl',
