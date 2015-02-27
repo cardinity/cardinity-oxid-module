@@ -2,7 +2,7 @@
 <OX>
 	<OXMENU id="NAVIGATION_ESHOPADMIN">
 		<MAINMENU id="CARDINITY">
-			<SUBMENU id="CARDINITY__CONFIG" cl="cardinity__config"></SUBMENU>
+			<SUBMENU id="CARDINITY__CONFIG" cl="CardinityConfig"></SUBMENU>
 		</MAINMENU>
 	</OXMENU>
 </OX>

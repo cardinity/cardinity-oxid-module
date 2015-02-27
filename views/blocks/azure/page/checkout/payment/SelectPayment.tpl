@@ -18,23 +18,21 @@
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">
         <ul class="form">
             <li>
-                <label>Number:</label>
-                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccnumber]" autocomplete="off" value="4111111111111111">
+                <label>[{oxmultilang ident='cardinity__CCNUMBER'}]:</label>
+                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccnumber]" autocomplete="off" value="">
                 <p class="oxValidateError">
-                    <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
+                    <span class="js-oxError_notEmpty">[{oxmultilang ident='cardinity__REQUIRED_FIELD'}]</span>
                 </p>
             </li>
             <li>
-                <label>Account holder:</label>
-                <input type="text" size="20" class="js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[ccname]" value="Mike Dough">
+                <label>[{oxmultilang ident='cardinity__ACCOUNT_HOLDER'}]:</label>
+                <input type="text" size="20" class="js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[ccname]" value="">
                 <p class="oxValidateError">
-                    <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
+                    <span class="js-oxError_notEmpty">[{oxmultilang ident='cardinity__REQUIRED_FIELD'}]</span>
                 </p>
-                <br>
-                <div class="note">If different from billing address.</div>
             </li>
             <li>
-                <label>Valid until:</label>
+                <label>[{oxmultilang ident='cardinity__VALID_UNTIL'}]:</label>
                 <select name="dynvalue[ccmonth]">
                   <option>01</option>
                   <option>02</option>
@@ -47,33 +45,26 @@
                   <option>09</option>
                   <option>10</option>
                   <option>11</option>
-                  <option selected="selected">12</option>
+                  <option>12</option>
                 </select>
 
                 &nbsp;/&nbsp;
 
                 <select name="dynvalue[ccyear]">
-                    <option>2015</option>
-                    <option selected="selected">2016</option>
-                    <option>2017</option>
-                    <option>2018</option>
-                    <option>2019</option>
-                    <option>2020</option>
-                    <option>2021</option>
-                    <option>2022</option>
-                    <option>2023</option>
-                    <option>2024</option>
-                    <option>2025</option>
+                    [{assign var=year value='Y'|date}]
+                    [{section name=years start=0 loop=11 step=1}]
+                        <option>[{$year+$smarty.section.years.index}]</option>
+                    [{/section}]
                 </select>
             </li>
             <li>
-                <label>CVV2 or CVC2 security code:</label>
-                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccpruef]" autocomplete="off" value="456">
+                <label>[{oxmultilang ident='cardinity__CVV'}]:</label>
+                <input type="text" class="js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[ccpruef]" autocomplete="off" value="">
                 <p class="oxValidateError">
-                    <span class="js-oxError_notEmpty">Specify a value for this required field.</span>
+                    <span class="js-oxError_notEmpty">[{oxmultilang ident='cardinity__REQUIRED_FIELD'}]</span>
                 </p>
                 <br>
-                <div class="note">This check digit is printed in reverse italic on the back side of your credit card right above the signature panel.</div>
+                <div class="note">[{oxmultilang ident='cardinity__CVV_DESC'}]</div>
             </li>
         </ul>
         

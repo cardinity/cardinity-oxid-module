@@ -1,7 +1,7 @@
 <?php
 
-class cardinityOxViewConfig extends cardinityOxViewConfig_parent {
-
+class CardinityOxViewConfig extends CardinityOxViewConfig_parent
+{
     /**
      * var array
      */
@@ -12,8 +12,9 @@ class cardinityOxViewConfig extends cardinityOxViewConfig_parent {
      *
      * @return array
      */
-    public function setCardinityConfig() {
-        $this->_aCardinityConfig = $this->getConfig()->getConfigParam('cardinity_config');
+    public function setCardinityConfig()
+    {
+        $this->_aCardinityConfig = $this->getConfig()->getConfigParam('cardinityConfig');
         if (is_array($this->_aCardinityConfig)) {
             $this->_aCardinityConfig = array_map("trim", $this->_aCardinityConfig);
         }
@@ -26,23 +27,10 @@ class cardinityOxViewConfig extends cardinityOxViewConfig_parent {
      *
      * @return mixed
      */
-    public function getCardinityConfigParam($config) {
-
+    public function getCardinityConfigParam($config)
+    {
         $this->setCardinityConfig();
 
-        return isset($this->_aCardinityConfig[$config]) ? $this->_aCardinityConfig[$config] : NULL;
+        return isset($this->_aCardinityConfig[$config]) ? $this->_aCardinityConfig[$config] : null;
     }
-
-    /**
-     * Set the payment field value
-     *
-     * @param $aDynName
-     * @return mixed
-     */
-    public function getPaymentFieldValue($aDynName) {
-
-        $aDynvalues = oxSession::getVar("dynvalue");
-        return $aDynvalues[$aDynName];
-    }
-
 }

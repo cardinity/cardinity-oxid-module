@@ -6,3 +6,4 @@ ALTER TABLE  `oxorder` ADD `cardinity_payment_type` TEXT NOT NULL;
 ALTER TABLE  `oxorder` ADD `cardinity_id` TEXT NOT NULL;
 ALTER TABLE  `oxorder` ADD `cardinity_response` TEXT NOT NULL;
 ALTER TABLE  `oxorder` ADD `cardinity_refund_response` TEXT NOT NULL;
+ALTER TABLE  `oxorder` ADD `cardinity_refund_date` DATETIME NOT NULL

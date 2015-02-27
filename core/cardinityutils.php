@@ -1,7 +1,7 @@
 <?php
 
-class CardinityUtils {
-
+class CardinityUtils
+{
     const STATUS_OK = 'OK';
     const STATUS_FAILED = 'FAILED';
     const STATUS_REFUNDED = 'REFUNDED';

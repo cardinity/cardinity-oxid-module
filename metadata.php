@@ -4,36 +4,33 @@
  * Metadata version
  */
 $sMetadataVersion = '1.0';
- 
+
 /**
  * Module information
  */
-$aModule = array(
+$aModule = [
     'id'           => 'cardinity',
     'title'        => 'Cardinity',
-    'description'  => array('en' => 'Credit card payment option.'),
+    'description'  => ['en' => 'Credit card payment option.'],
     'version'      => '1.0',
     'author'       => 'Paulius Podolskis',
     'email'        => 'paulius.b@estina.lt',
-    'extend'        => array(
-        'payment'           => 'cardinity/controllers/cardinitypayment',
-        'oxpaymentgateway'  => 'cardinity/models/cardinitypaymentgateway',
-        'oxviewconfig'      => 'cardinity/core/cardinityoxviewconfig',
-        'order_overview'    => 'cardinity/controllers/admin/cardinityorderoverview',
-    ),
-    'files'         => array(
-        'cardinity__config'  => 'cardinity/controllers/admin/cardinity__config.php',
-        'cardinityutils'  => 'cardinity/core/cardinityutils.php',
-    ),
-    'blocks'       => array(
-        array('template'    => 'page/checkout/payment.tpl',
+    'extend'        => [
+        'oxpaymentgateway'  => 'cardinity/models/CardinityPaymentGateway',
+        'oxviewconfig'      => 'cardinity/core/CardinityOxViewConfig',
+        'order_overview'    => 'cardinity/controllers/admin/CardinityOrderOverview',
+    ],
+    'files'         => [
+        'CardinityConfig'  => 'cardinity/controllers/admin/CardinityConfig.php',
+        'CardinityUtils'  => 'cardinity/core/CardinityUtils.php',
+    ],
+    'blocks'       => [
+        ['template'    => 'page/checkout/payment.tpl',
               'block'       => 'select_payment',
-              'file'        => '/views/blocks/azure/page/checkout/payment/select_payment.tpl'),
-    ),
-    'templates'     => array(
-        'cardinity__config.tpl'  => 'cardinity/views/admin/tpl/cardinity__config.tpl',
-        'cardinityorderoverview.tpl' => 'cardinity/views/admin/tpl/cardinityorderoverview.tpl',
-    )
-    );
-
-?>
+              'file'        => '/views/blocks/azure/page/checkout/payment/SelectPayment.tpl'],
+    ],
+    'templates'     => [
+        'CardinityConfig.tpl'  => 'cardinity/views/admin/tpl/CardinityConfig.tpl',
+        'CardinityOrderOverview.tpl' => 'cardinity/views/admin/tpl/CardinityOrderOverview.tpl',
+    ]
+    ];

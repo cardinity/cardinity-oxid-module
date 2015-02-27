@@ -2,8 +2,8 @@
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-class cardinityOrderOverview extends cardinityOrderOverview_parent {
-
+class CardinityOrderOverview extends CardinityOrderOverview_parent
+{
     /**
      * Render the template
      *
@@ -13,8 +13,11 @@ class cardinityOrderOverview extends cardinityOrderOverview_parent {
      * @param
      * @return string
      */
-    public function render() {
-        $this->_aViewData['statusOK'] = CardinityUtils::STATUS_OK;
+    public function render()
+    {
+        $this->_aViewData['statusOk'] = CardinityUtils::STATUS_OK;
+        $this->_aViewData['statusRefunded'] = CardinityUtils::STATUS_REFUNDED;
+        $this->_aViewData['statusFailed'] = CardinityUtils::STATUS_FAILED;
         $this->_sThisTemplate = parent::render();
         $oOrder = oxNew("oxorder");
         $soxId = $this->getEditObjectId();
@@ -24,6 +27,7 @@ class cardinityOrderOverview extends cardinityOrderOverview_parent {
             $oOrder->load($soxId);
             //payment method
             $payment_type = $oOrder->oxorder__oxpaymenttype->value;
+            $this->_aViewData['paymentResponse'] = json_decode(str_replace('&quot;', '"', $oOrder->oxorder__cardinity_response->value), true);
 
             $this->_sThisTemplate = $this->getTemplate($payment_type, $this->_sThisTemplate);
         }
@@ -37,20 +41,25 @@ class cardinityOrderOverview extends cardinityOrderOverview_parent {
      * Returns Cardinity order overview template if the payment methods are cardinity payment method
      * else it returns base class templates .
      *
-     * @extend render
      * @param  string $payment_type
      * @param  string $parent
      * @return string
      */
-    private function getTemplate($payment_type, $parent) {
+    private function getTemplate($payment_type, $parent)
+    {
         $sTemplate = $parent;
         if ($payment_type == 'cardinity') {
-            $sTemplate = "cardinityorderoverview.tpl";
+            $sTemplate = "CardinityOrderOverview.tpl";
         }
-        return $sTemplate;
+
+        return "CardinityOrderOverview.tpl";
     }
 
-    public function cardinityRefund() {
+    /**
+     * Refund action
+     */
+    public function refund()
+    {
         $soxId = $this->getEditObjectId();
         if ($soxId != "-1" && isset($soxId)) {
             // load object
@@ -58,40 +67,50 @@ class cardinityOrderOverview extends cardinityOrderOverview_parent {
             if ($oOrder->load($soxId)) {
                 if ($oOrder->oxorder__cardinity_status->value == CardinityUtils::STATUS_OK &&
                         !empty($oOrder->oxorder__cardinity_id->value)) {
-                    $this->refund($oOrder);
+                    $this->cardinityRefund($oOrder);
                 }
             }
         }
     }
 
-    private function refund(&$oOrder) {
+    /**
+     * Make refund using Cardinity lib
+     * 
+     * @param type $oOrder
+     * @return boolean
+     */
+    private function cardinityRefund(&$oOrder)
+    {
         try {
             $viewConfig = oxRegistry::getConfig()->getTopActiveView()->getViewConfig();
 
-            $cardinity = Cardinity\Client::create(array(
+            $cardinity = Cardinity\Client::create([
                         'consumerKey' => $viewConfig->getCardinityConfigParam('consumerKey'),
                         'consumerSecret' => $viewConfig->getCardinityConfigParam('consumerSecret'),
-            ));
+            ]);
             $refund = new Cardinity\Refund\Create(
-                    $oOrder->oxorder__cardinity_id->value, 
-                    CardinityUtils::formatAmount($oOrder->oxorder__oxtotalordersum->value), 
+                    $oOrder->oxorder__cardinity_id->value,
+                    CardinityUtils::formatAmount($oOrder->oxorder__oxtotalordersum->value),
                     'refund'
             );
 
             $response = $cardinity->get($refund);
 
             $oOrder->oxorder__cardinity_refund_response = new oxField(json_encode($response));
+            $oOrder->oxorder__cardinity_refunded = new oxField(date('Y-m-d H:i:s'));
             $oOrder->oxorder__cardinity_status = new oxField(CardinityUtils::STATUS_REFUNDED);
-            $oOrder->save(); 
-        
+            $oOrder->save();
+
             return true;
-        
+
         } catch (Cardinity\Exception\BadRequest $e){
             $msg = isset($e->getResponseData()['errors'][0]['message']) ? $e->getResponseData()['errors'][0]['message'] : $e->getMessage();
             $this->_aViewData["error"] = $msg;
+
             return false;
         } catch (Exception $e) {
             $this->_aViewData["error"] = $e->getMessage();
+
             return false;
         }
     }
