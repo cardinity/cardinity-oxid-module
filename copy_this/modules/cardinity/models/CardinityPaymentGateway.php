@@ -4,10 +4,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 {
-    
+
     /**
      * Executes Cardinity payment after order confirmation
-     * 
+     *
      * @param float $dAmount
      * @param oxOrder $oOrder
      * @return boolean
@@ -17,14 +17,14 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
         if ($this->_oPaymentInfo->oxuserpayments__oxpaymentsid->value != 'cardinity') {
             return parent::executePayment($dAmount, $oOrder);
         }
-        
+
         $this->_iLastErrorNo = null;
         $this->_sLastError = null;
 
         try {
             $aPaymentInfoArr = $this->_getPaymentInfo();
             $this->_clearSensitiveData();
-            
+
             $viewConfig = oxRegistry::getConfig()->getTopActiveView()->getViewConfig();
 
             $cardinity = \Cardinity\Client::create([
@@ -71,15 +71,15 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
     private function getCountryCode($oOrder)
     {
         $countryId = $oOrder->oxorder__oxbillcountryid->value;
-        $oCountry = &oxNew("oxcountry", "core");
-        $oCountry->Load($countryId); 
-        
+        $oCountry = oxNew("oxcountry", "core");
+        $oCountry->Load($countryId);
+
         return $oCountry->oxcountry__oxisoalpha2->value;
     }
-    
+
     /**
      * Get credit card information
-     * 
+     *
      * @return array
      */
     private function _getPaymentInfo()
@@ -90,10 +90,10 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
             $value = $obj->value;
             $aPaymentInfoArr[$key] = $value;
         }
-        
+
         return $aPaymentInfoArr;
     }
-    
+
     /**
      * Do not store sensitive data in database
      */
@@ -103,10 +103,10 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
         $this->_oPaymentInfo->_aDynValues = null;
         $this->_oPaymentInfo->save();
     }
-    
+
     /**
      * Create order id
-     * 
+     *
      * @param oxOrder $oOrder
      * @return string
      */
@@ -117,7 +117,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 
     /**
      * Update order with payment information
-     * 
+     *
      * @param oxOrder $oOrder
      * @param array $response
      * @param string $status
