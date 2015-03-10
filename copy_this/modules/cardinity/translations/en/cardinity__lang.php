@@ -5,6 +5,7 @@ $sLangName = "English";
 $aLang = [
     'charset' => 'UTF-8',
     'cardinity__REQUIRED_FIELD' => 'Specify a value for this required field.',
+    'cardinity__INVALID_DATE' => 'Specify a valid date of credit card validity period.',
     'cardinity__CCNUMBER' => 'Number',
     'cardinity__ACCOUNT_HOLDER' => 'Account holder',
     'cardinity__VALID_UNTIL' => 'Valid until',

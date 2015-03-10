@@ -33,7 +33,7 @@
             </li>
             <li>
                 <label>[{oxmultilang ident='cardinity__VALID_UNTIL'}]:</label>
-                <select name="dynvalue[ccmonth]">
+                <select name="dynvalue[ccmonth]" id="cardinity-month">
                   <option>01</option>
                   <option>02</option>
                   <option>03</option>
@@ -50,12 +50,15 @@
 
                 &nbsp;/&nbsp;
 
-                <select name="dynvalue[ccyear]">
+                <select name="dynvalue[ccyear]" id="cardinity-year">
                     [{assign var=year value='Y'|date}]
                     [{section name=years start=0 loop=11 step=1}]
                         <option>[{$year+$smarty.section.years.index}]</option>
                     [{/section}]
                 </select>
+                <p class="oxValidateError">
+                    <span class="js-oxError_notEmpty">[{oxmultilang ident='cardinity__INVALID_DATE'}]</span>
+                </p>
             </li>
             <li>
                 <label>[{oxmultilang ident='cardinity__CVV'}]:</label>
@@ -75,6 +78,7 @@
         </div>
         [{/if}]
         [{/block}]
+        [{oxscript include=$oViewConf->getModuleUrl('cardinity', 'out/src/js/cardinity.js')}]
     </dd>
     </dt>
 </dl>
