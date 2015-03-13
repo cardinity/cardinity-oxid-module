@@ -4,6 +4,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 {
+    
+    const STATUS_APPROVED = 'approved';
 
     /**
      * Executes Cardinity payment after order confirmation
@@ -28,18 +30,18 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
             $viewConfig = oxRegistry::getConfig()->getTopActiveView()->getViewConfig();
 
             $cardinity = \Cardinity\Client::create([
-                        'consumerKey' => $viewConfig->getCardinityConfigParam('consumerKey'),
-                        'consumerSecret' => $viewConfig->getCardinityConfigParam('consumerSecret'),
+                'consumerKey' => $viewConfig->getCardinityConfigParam('consumerKey'),
+                'consumerSecret' => $viewConfig->getCardinityConfigParam('consumerSecret'),
             ]);
 
-            $payment = new \Cardinity\Payment\Create([
+            $payment = new \Cardinity\Method\Payment\Create([
                 'amount' => CardinityUtils::formatAmount($dAmount),
                 'currency' => $oOrder->oxorder__oxcurrency->value,
                 'settle' => true,
                 'description' => $this->getConfig()->getActiveShop()->oxshops__oxname->value,
                 'order_id' => $this->_getOrderId($oOrder),
                 'country' => $this->getCountryCode($oOrder),
-                'payment_method' => \Cardinity\Payment\Create::CARD,
+                'payment_method' => \Cardinity\Method\Payment\Create::CARD,
                 'payment_instrument' => [
                     'pan' => $aPaymentInfoArr['ccnumber'],
                     'exp_year' => $aPaymentInfoArr['ccyear'],
@@ -49,21 +51,22 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
                 ],
             ]);
 
-            $this->responseData = $cardinity->get($payment);
-
+            $this->responseData = $cardinity->call($payment);
+            
             $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_OK);
+            if ($this->responseData->getStatus() !== self::STATUS_APPROVED) {
+                oxRegistry::getLang()->translateString('cardinity__PAYMENT_ERROR');
+                return false;
+            }
 
             return true;
-        } catch (\Cardinity\Exception\RequestFailed $e) {
-
-            if(isset($e->getResponseData()['error'])){
-                $this->_sLastError = $e->getResponseData()['error'];
-            }
-            $this->_updateOrderTransaction($oOrder, $e->getResponseData(), CardinityUtils::STATUS_FAILED);
+        } catch (\Cardinity\Exception\Declined $e) {
+            $this->_sLastError = oxRegistry::getLang()->translateString('cardinity__PAYMENT_DECLINED');
+            $this->_updateOrderTransaction($oOrder, $e->getResult(), CardinityUtils::STATUS_FAILED);
 
             return false;
         } catch (Exception $e) {
-
+            $this->_sLastError = oxRegistry::getLang()->translateString('cardinity__PAYMENT_EXCEPTION');
             return false;
         }
     }
@@ -125,13 +128,12 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
     private function _updateOrderTransaction(&$oOrder, $response, $status)
     {
         $oOrder->oxorder__cardinity_status = new oxField($status);
-        $oOrder->oxorder__cardinity_payment_type = new oxField($response['type']);
-        $oOrder->oxorder__cardinity_id = new oxField($response['id']);
-        $oOrder->oxorder__cardinity_response = new oxField(json_encode($response));
-        if($status == CardinityUtils::STATUS_OK){
+        $oOrder->oxorder__cardinity_payment_type = new oxField($response->getType());
+        $oOrder->oxorder__cardinity_id = new oxField($response->getId());
+        $oOrder->oxorder__cardinity_response = new oxField(is_array($response) ? json_encode($response) : serialize($response));
+        if ($status == CardinityUtils::STATUS_OK) {
             $oOrder->oxorder__oxpaid = new oxField(date('Y-m-d H:i:s'));
         }
         $oOrder->save();
     }
-
 }

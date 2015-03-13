@@ -1,6 +1,7 @@
 <?php
 
-class CardinityConfig extends Shop_Config {
+class CardinityConfig extends Shop_Config
+{
 
     /**
      * class template.
@@ -12,7 +13,8 @@ class CardinityConfig extends Shop_Config {
      * @extend render
      * @return string
      */
-    public function render() {
+    public function render()
+    {
         $this->_aViewData['cardinityConfig'] = $this->getConfig()->getShopConfVar('cardinityConfig');
         return $this->_sThisTemplate;
     }
@@ -21,10 +23,10 @@ class CardinityConfig extends Shop_Config {
      * @extend save
      * @return void
      */
-    public function save() {
+    public function save()
+    {
         $oxConfig = $this->getConfig();
         $cardinityConfig = $oxConfig->getRequestParameter('cardinityConfig');
         $oxConfig->saveShopConfVar('arr', 'cardinityConfig', $cardinityConfig);
     }
-
 }
