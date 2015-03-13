@@ -1,5 +1,5 @@
 <div style="padding: 10px; border-left: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a;">
-[{if $paymentType->oxuserpayments__oxpaymentsid->value eq 'cardinity'}]
+[{if $paymentType->oxuserpayments__oxpaymentsid->value eq 'cardinity-oxid-module'}]
     [{if $error}]
         <span style="color: #f00">[{$error}]</span><br/>
     [{/if}]

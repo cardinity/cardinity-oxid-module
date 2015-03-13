@@ -1,4 +1,4 @@
-[{if $sPaymentID == "cardinity"}]
+[{if $sPaymentID == "cardinity-oxid-module"}]
 <dl>
     <dt>
     <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}]>
