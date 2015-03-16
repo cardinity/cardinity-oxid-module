@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<OX>
+	<OXMENU id="NAVIGATION_ESHOPADMIN">
+		<MAINMENU id="mxshopsett">
+			<SUBMENU id="CARDINITY__CONFIG" cl="CardinityConfig"></SUBMENU>
+		</MAINMENU>
+	</OXMENU>
+</OX>
