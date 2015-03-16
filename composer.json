@@ -5,6 +5,6 @@
     "require": {
     	"php"                           : ">=5.4.0",
         "composer/installers"           : "~1.0",
-    	"cardinity/cardinity-sdk-php"   : "dev-master"
+    	"cardinity/cardinity-sdk-php"   : "~1.0"
     }
 }
