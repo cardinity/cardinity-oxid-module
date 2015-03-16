@@ -16,7 +16,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
      */
     public function executePayment($dAmount, &$oOrder)
     {
-        if ($this->_oPaymentInfo->oxuserpayments__oxpaymentsid->value != 'cardinity') {
+        if ($this->_oPaymentInfo->oxuserpayments__oxpaymentsid->value != 'cardinity-oxid-module') {
             return parent::executePayment($dAmount, $oOrder);
         }
 
@@ -44,8 +44,8 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
                 'payment_method' => \Cardinity\Method\Payment\Create::CARD,
                 'payment_instrument' => [
                     'pan' => $aPaymentInfoArr['ccnumber'],
-                    'exp_year' => $aPaymentInfoArr['ccyear'],
-                    'exp_month' => $aPaymentInfoArr['ccmonth'],
+                    'exp_year' => (int)$aPaymentInfoArr['ccyear'],
+                    'exp_month' => (int)$aPaymentInfoArr['ccmonth'],
                     'cvc' => $aPaymentInfoArr['ccpruef'],
                     'holder' => $aPaymentInfoArr['ccname']
                 ],
@@ -66,6 +66,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 
             return false;
         } catch (Exception $e) {
+            var_dump($e);exit;
             $this->_sLastError = oxRegistry::getLang()->translateString('cardinity__PAYMENT_EXCEPTION');
             return false;
         }

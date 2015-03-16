@@ -48,7 +48,7 @@ class CardinityOrderOverview extends CardinityOrderOverview_parent
     private function getTemplate($payment_type, $parent)
     {
         $sTemplate = $parent;
-        if ($payment_type == 'cardinity') {
+        if ($payment_type == 'cardinity-oxid-module') {
             $sTemplate = "CardinityOrderOverview.tpl";
         }
 

@@ -78,7 +78,7 @@
         </div>
         [{/if}]
         [{/block}]
-        [{oxscript include=$oViewConf->getModuleUrl('cardinity', 'out/src/js/cardinity.js')}]
+        [{oxscript include=$oViewConf->getModuleUrl('cardinity-oxid-module', 'out/src/js/cardinity.js')}]
     </dd>
     </dt>
 </dl>
