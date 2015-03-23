@@ -14,4 +14,6 @@ $aLang = [
     'cardinity__PAYMENT_ERROR' => 'Unable to make payment with given credit card information.',
     'cardinity__PAYMENT_DECLINED' => 'Your payment was declined.',
     'cardinity__PAYMENT_EXCEPTION' => 'Unable to make payment. Please try again.',
+    'cardinity__PAYMENT_REDIRECT_MESSAGE' => 'If your browser does not start loading the page, press the button below. You will be sent back to this site after you authorize the transaction.',
+    'cardinity__PAYMENT_REDIRECT_SUBMIT' => 'Click Here',
 ];
