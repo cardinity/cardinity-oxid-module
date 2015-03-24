@@ -22,7 +22,7 @@ $ php composer.phar install
 ```
 
 ### Downloading ZIP
-1. Download the source as [ZIP](https://github.com/cardinity/cardinity-oxid-module/archive/master.zip).  
+1. Download the source as [ZIP including vendors](https://github.com/cardinity/cardinity-oxid-module/releases/download/v1.0.0/cardinity-oxid-v1.0.0-incl-vendors.zip).
 2. Create module directory   `cardinity-oxid-module` under `_OXID_INSTALLATION_PATH_/source/modules/`  
 3. Extract ZIP archive and move the contents to `_OXID_INSTALLATION_PATH_/source/modules/cardinity-oxid-module`
 
