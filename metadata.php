@@ -17,7 +17,7 @@ $aModule = [
     'email'        => 'info@cardinity.com',
     'url'          => 'https://github.com/cardinity/cardinity-oxid-module',
     'extend'        => [
-        'order'             => 'cardinity/controllers/CardinityOrder',
+        'order'             => 'cardinity-oxid-module/controllers/CardinityOrder',
         'oxpaymentgateway'  => 'cardinity-oxid-module/models/CardinityPaymentGateway',
         'oxviewconfig'      => 'cardinity-oxid-module/core/CardinityOxViewConfig',
         'order_overview'    => 'cardinity-oxid-module/controllers/admin/CardinityOrderOverview',
@@ -25,7 +25,7 @@ $aModule = [
     'files'         => [
         'CardinityConfig'  => 'cardinity-oxid-module/controllers/admin/CardinityConfig.php',
         'CardinityUtils'  => 'cardinity-oxid-module/core/CardinityUtils.php',
-        'CardinityRedirect'  => 'cardinity/controllers/CardinityRedirect.php',
+        'CardinityRedirect'  => 'cardinity-oxid-module/controllers/CardinityRedirect.php',
     ],
     'blocks'       => [
         [
@@ -42,6 +42,6 @@ $aModule = [
     'templates'     => [
         'CardinityConfig.tpl'  => 'cardinity-oxid-module/views/admin/tpl/CardinityConfig.tpl',
         'CardinityOrderOverview.tpl' => 'cardinity-oxid-module/views/admin/tpl/CardinityOrderOverview.tpl',
-        'CardinityRedirect.tpl' => 'cardinity/views/tpl/cardinity/CardinityRedirect.tpl',
+        'CardinityRedirect.tpl' => 'cardinity-oxid-module/views/tpl/cardinity/CardinityRedirect.tpl',
     ]
 ];

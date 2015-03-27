@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 {
-    
+
     const STATUS_APPROVED = 'approved';
     const STATUS_PENDING = 'pending';
 
@@ -35,7 +35,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
             if($this->getConfig()->getRequestParameter('PaRes')){
                 return $this->_secondPaymentCall($dAmount, $oOrder, $cardinity);
             }
-            
+
             return $this->_firstPaymentCall($dAmount, $oOrder, $cardinity);
         } catch (\Cardinity\Exception\Declined $e) {
             $this->_sLastError = oxRegistry::getLang()->translateString('cardinity__PAYMENT_DECLINED');
@@ -52,7 +52,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
     {
         $aPaymentInfoArr = $this->_getPaymentInfo();
         $this->_clearSensitiveData();
-            
+
         $payment = new \Cardinity\Method\Payment\Create([
             'amount' => CardinityUtils::formatAmount($dAmount),
             'currency' => $oOrder->oxorder__oxcurrency->value,
@@ -81,40 +81,41 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
 
         if($this->responseData->getStatus() !== self::STATUS_APPROVED){
             $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_FAILED);
-        
+
             oxRegistry::getLang()->translateString('cardinity__PAYMENT_ERROR');
             return false;
         }
-        
+
         $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_OK);
 
         return true;
     }
-    
+
     private function _secondPaymentCall($dAmount, &$oOrder, $cardinity)
     {
+        $this->_clearSensitiveData();
         $paymentId = oxRegistry::getSession()->getVariable('cardinity_payment_id');
         if(!$paymentId){
             return false;
         }
-        
+
         $payment = new \Cardinity\Method\Payment\Finalize(
-            $paymentId, 
+            $paymentId,
             $this->getConfig()->getRequestParameter('PaRes')
         );
 
         $this->responseData = $cardinity->call($payment);
-        
+
         if($this->responseData->getStatus() !== self::STATUS_APPROVED){
             $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_FAILED);
             oxRegistry::getLang()->translateString('cardinity__PAYMENT_ERROR');
             return false;
         }
-        
+
         $this->_updateOrderTransaction($oOrder, $this->responseData, CardinityUtils::STATUS_OK);
         return true;
     }
-    
+
     private function _redirectPayment()
     {
         $autorizationData = $this->responseData->getAuthorizationInformation();
@@ -129,7 +130,7 @@ class CardinityPaymentGateway extends CardinityPaymentGateway_parent
         $redirect_url = $this->getConfig()->getShopUrl() . 'index.php?cl=CardinityRedirect';
         return oxRegistry::getUtils()->redirect($redirect_url);
     }
-    
+
     private function _getCountryCode($oOrder)
     {
         $countryId = $oOrder->oxorder__oxbillcountryid->value;
