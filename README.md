@@ -27,7 +27,8 @@ $ php composer.phar install
 3. Extract ZIP archive and move the contents to `_OXID_INSTALLATION_PATH_/source/modules/cardinity-oxid-module`
 
 ## 2. Execute SQL code
-Execute SQL from `_OXID_INSTALLATION_PATH_/source/modules/cardinity-oxid-module/Install.sql` file.
+Execute SQL from `_OXID_INSTALLATION_PATH_/source/modules/cardinity-oxid-module/Install.sql` file.  
+SQL file can be imported via admin panel under `Admin -> Service -> Tools -> SQL`.
 
 
 ## 3. Activate the payment module
