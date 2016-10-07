@@ -1,5 +1,6 @@
 {
     "name": "cardinity/cardinity-oxid-module",
+    "description": "Cardinity Credit card payment module for your Oxid e-shop",
     "type": "oxid-module",
     "license": "MIT",
     "require": {
