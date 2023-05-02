@@ -1,5 +1,10 @@
 # Cardinity Payment Gateway for Oxid
 Cardinity Credit card payment module for your Oxid e-shop
+
+## Deprecation notice
+
+This repository is deprecated.
+
 ### Table of Contents  
 [<b>How to install? →</b>](#how-to-install)<br>
     [Getting the source](#getting-the-source)  
